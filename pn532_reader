@@ -1,0 +1,23 @@
+class Rfid:
+    def __init__(self, uart_port="/dev/serial0", baudrate=115200):
+        import serial
+        from adafruit_pn532.uart import PN532_UART
+
+        self.uart = serial.Serial(uart_port, baudrate=baudrate, timeout=1)
+        self.pn532 = PN532_UART(self.uart)
+
+        self.pn532.SAM_configuration()
+
+    def read_uid(self):
+        uid = self.pn532.read_passive_target(timeout=5)
+        if uid:
+            return ''.join([hex(byte)[2:].upper().zfill(2) for byte in uid])
+        return None
+
+if __name__ == "__main__":
+    rf = Rfid()
+    uid = rf.read_uid()
+    if uid:
+        print(f"UID de la tarjeta: {uid}")
+    else:
+        print("No se detectó ninguna tarjeta.")
