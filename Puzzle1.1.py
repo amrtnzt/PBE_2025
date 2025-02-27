@@ -17,7 +17,7 @@ class Rfid:
     def read_uid(self):
       uid=lector.read_passive_target(timeout=4)
       uid_conv=''.join([hex(byte)[2:].upper().zfill(2) for byte in uid])
-      if uid 
+      if uid:
         return uid_conv
       return "No s'ha detectat cap targeta"
 
